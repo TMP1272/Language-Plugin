@@ -28,6 +28,7 @@ android {
         }
     }
 
+    flavorDimensions "languege"
     productFlavors {
         vi {
             dimension "languege"
