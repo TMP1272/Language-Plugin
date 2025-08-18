@@ -3,15 +3,15 @@ plugins {
 }
 
 android {
-    namespace 'com.tmp1272.languege_vi'
+    namespace 'com.tmp1272.languege'
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.tmp1272.languege_vi"
+        applicationId "com.tmp1272.languege"
         minSdk 24
         targetSdk 36
-        versionCode 1
-        versionName "1.0"
+        versionCode 20250819
+        versionName "1.0.0"
     }
 
     buildTypes {
@@ -32,7 +32,7 @@ android {
     productFlavors {
         vi {
             dimension "languege"
-            applicationIdSuffix ".vi"
+            applicationIdSuffix "_vi"
             versionNameSuffix "-vi"
         }
     }
