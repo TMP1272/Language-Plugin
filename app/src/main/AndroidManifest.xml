@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tmp1272.languege_vi">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application android:label="Language VI">
         <activity android:name=".Main" android:exported="false" />
