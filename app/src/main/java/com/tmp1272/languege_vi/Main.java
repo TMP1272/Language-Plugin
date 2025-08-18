@@ -1,4 +1,4 @@
-package com.tmp1272.vi;
+package com.tmp1272.languege_vi;
 
 import android.os.Bundle;
 import android.app.Activity;
