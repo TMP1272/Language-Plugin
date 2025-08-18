@@ -1,0 +1,3 @@
+-keep class **.R$* {
+    <fields>;
+}
