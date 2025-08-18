@@ -1,0 +1,5 @@
+<resources>
+    <string name="hello">Xin chào</string>
+    <string name="welcome">Chào mừng bạn</string>
+    <string name="bye">Tạm biệt</string>
+</resources>
