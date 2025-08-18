@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'com.tmp1272.languege_vi'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.tmp1272.languege_vi"
-        minSdk 21
-        targetSdk 34
+        minSdk 23
+        targetSdk 35
         versionCode 1
         versionName "1.0"
     }
