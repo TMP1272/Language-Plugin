@@ -1,5 +1,5 @@
 <resources>
-    <string name="hello">Xin chào</string>
-    <string name="welcome">Chào mừng bạn</string>
-    <string name="bye">Tạm biệt</string>
+    <string name="app_name">Languege VI</string>
+    <string name="languege">Ngôn ngữ</string>
+    <string name="setting">Cài đặt</string>
 </resources>
