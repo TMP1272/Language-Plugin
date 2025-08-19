@@ -14,5 +14,5 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "Language-Plugin"
+rootProject.name = "Languege-Plugin"
 include(":app")
