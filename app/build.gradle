@@ -39,8 +39,8 @@ android {
 
     sourceSets {
         vi {
-            java.srcDirs = ['../app/vi/java']
-            res.Dirs = ['../app/vi/res']
+            java.srcDirs = ['../app/src/vi/java']
+            res.Dirs = ['../app/src/vi/res']
             manifest.srcFile = ['../app/vi/AndroidManifest.xml']
         }
     }
