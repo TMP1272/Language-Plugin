@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.tmp1272'
+    namespace = 'com.tmp1272'
     compileSdk 36
 
     defaultConfig {
@@ -17,14 +17,14 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            shrinkResources false
+            shrinkResources = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
     packagingOptions {
         jniLibs {
-            useLegacyPackaging true
+            useLegacyPackaging = true
         }
     }
 
