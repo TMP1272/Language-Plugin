@@ -36,6 +36,14 @@ android {
             versionNameSuffix "-vi"
         }
     }
+
+    sourceSets {
+        vi {
+            manifest.srcFile = 'src/vi/AndroidManifest.xml'
+            java.srcDirs = ['src/vi/java']
+            res.srcDirs = ['src/vi/res']
+        }
+    }
 }
 
 dependencies {
