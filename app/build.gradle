@@ -28,11 +28,11 @@ android {
         }
     }
 
-    flavorDimensions "languege"
+    flavorDimensions "language"
     productFlavors {
         vi {
-            dimension "languege"
-            applicationIdSuffix ".languege_vi"
+            dimension "language"
+            applicationIdSuffix ".language_vi"
             versionNameSuffix "-vi"
         }
     }
