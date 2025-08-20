@@ -50,14 +50,84 @@
   <color name="purple_a700">#AA00FF</color>
   
   <!-- Deep Purple -->
+  <color name="deep_purple50">#EDE7F6</color>
+  <color name="deep_purple100">#D1C4E9</color>
+  <color name="deep_purple200">#B39DDB</color>
+  <color name="deep_purple300">#9575CD</color>
+  <color name="deep_purple400">#7E57C2</color>
+  <color name="deep_purple500">#673AB7</color>
+  <color name="deep_purple600">#5E35B1</color>
+  <color name="deep_purple700">#512DA8</color>
+  <color name="deep_purple800">#4527A0</color>
+  <color name="deep_purple900">#311B92</color>
+  <color name="deep_purple_a100">#B388FF</color>
+  <color name="deep_purple_a200">#7C4DFF</color>
+  <color name="deep_purple_a400">#651FFF</color>
+  <color name="deep_purple_a700">#6200EA</color>
   
   <!-- Indigo -->
+  <color name="indigo50">#E8EAF6</color>
+  <color name="indigo100">#C5CAE9</color>
+  <color name="indigo200">#9FA8DA</color>
+  <color name="indigo300">#7986CB</color>
+  <color name="indigo400">#5C6BC0</color>
+  <color name="indigo500">#3F51B5</color>
+  <color name="indigo600">#3949AB</color>
+  <color name="indigo700">#303F9F</color>
+  <color name="indigo800">#283593</color>
+  <color name="indigo900">#1A237E</color>
+  <color name="indigo_a100">#8C9EFF</color>
+  <color name="indigo_a200">#536DFE</color>
+  <color name="indigo_a400">#3D5AFE</color>
+  <color name="indigo_a700">#304FFE</color>
   
   <!-- Blue -->
+  <color name="blue50">#E3F2FD</color>
+  <color name="blue100">#BBDEFB</color>
+  <color name="blue200">#90CAF9</color>
+  <color name="blue300">#64B5F6</color>
+  <color name="blue400">#42A5F5</color>
+  <color name="blue500">#2196F3</color>
+  <color name="blue600">#1E88E5</color>
+  <color name="blue700">#1976D2</color>
+  <color name="blue800">#1565C0</color>
+  <color name="blue900">#0D47A1</color>
+  <color name="blue_a100">#82B1FF</color>
+  <color name="blue_a200">#448AFF</color>
+  <color name="blue_a400">#2979FF</color>
+  <color name="blue_a700">#2962FF</color>
   
   <!-- Light Blue -->
+  <color name="light_blue50">#E1F5FE</color>
+  <color name="light_blue100">#B3E5FC</color>
+  <color name="light_blue200">#81D4FA</color>
+  <color name="light_blue300">#4FC3F7</color>
+  <color name="light_blue400">#29B6F6</color>
+  <color name="light_blue500">#03A9F4</color>
+  <color name="light_blue600">#039BE5</color>
+  <color name="light_blue700">#0288D1</color>
+  <color name="light_blue800">#0277BD</color>
+  <color name="light_blue900">#01579B</color>
+  <color name="light_blue_a100">#80D8FF</color>
+  <color name="light_blue_a200">#40C4FF</color>
+  <color name="light_blue_a400">#00B0FF</color>
+  <color name="light_blue_a700">#0091EA</color>
   
   <!-- Cyan -->
+  <color name="cyan50">#E0F7FA</color>
+  <color name="cyan100">#B2EBF2</color>
+  <color name="cyan200">#80DEEA</color>
+  <color name="cyan300">#4DD0E1</color>
+  <color name="cyan400">#26C6DA</color>
+  <color name="cyan500">#00BCD4</color>
+  <color name="cyan600">#00ACC1</color>
+  <color name="cyan700">#0097A7</color>
+  <color name="cyan800">#00838F</color>
+  <color name="cyan900">#006064</color>
+  <color name="cyan_a100">#84FFFF</color>
+  <color name="cyan_a200">#18FFFF</color>
+  <color name="cyan_a400">#00E5FF</color>
+  <color name="cyan_a700">#00B8D4</color>
   
   <!-- Teal -->
   
