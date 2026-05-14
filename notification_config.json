@@ -1,0 +1,23 @@
+{
+  "title": "📢 Thông báo từ GitHub",
+  "content": "Đây là nội dung thông báo được đọc từ JSON",
+  "sub_text": "Vừa cập nhật",
+  "summary": "Tóm tắt nội dung",
+  "big_text": "Đây là văn bản dài, hiển thị khi người dùng kéo xuống...",
+  "inbox_lines": "Dòng 1|Dòng 2|Dòng 3",
+  "small_icon": "res:ic_launcher",
+  "large_icon": "res:ic_launcher",
+  "big_picture": "",
+  "sound": true,
+  "vibrate": true,
+  "buttons": [
+    {"text": "Google", "url": "https://google.com"},
+    {"text": "YouTube", "url": "https://youtube.com"},
+    {"text": "GitHub", "url": "https://github.com"}
+  ],
+  "progress": {
+    "enabled": false,
+    "max": 100,
+    "current": 0
+  }
+}
