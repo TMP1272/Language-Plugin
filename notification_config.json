@@ -11,8 +11,8 @@
   "large_icon": "",
   "big_picture": "",
   
-  "sound": true,
-  "vibrate": true,
+  "sound": false,
+  "vibrate": false,
   
   "buttons": [
     {"text": "Telecloud", "url": ""},
