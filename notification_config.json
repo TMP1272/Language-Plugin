@@ -15,7 +15,7 @@
   "vibrate": true,
   
   "buttons": [
-    {"text": "Telecloud", "url": ""},
+    {"text": "Telecloud", "url": "https://github.com/TMP1272/Language-Plugin/edit/main/notification_config.json"},
     {"text": "YouTube", "url": "https://youtube.com"},
     {"text": "GitHub", "url": "https://github.com"}
   ],
