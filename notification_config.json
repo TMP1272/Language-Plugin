@@ -15,7 +15,7 @@
   "vibrate": true,
   
   "buttons": [
-    {"text": "", "url": ""},
+    {"text": "Telecloud", "url": ""},
     {"text": "YouTube", "url": "https://youtube.com"},
     {"text": "GitHub", "url": "https://github.com"}
   ],
