@@ -1,7 +1,7 @@
 {
   "title": "⚠️ Cảnh báo bảo mật",
   "content": "Phát hiện đăng nhập lạ",
-  "sub_text": "Ngay bây giờ",
+  "sub_text": "",
   "summary": "Địa chỉ IP: 192.168.1.1",
   "big_text": "Có một thiết bị lạ đăng nhập vào tài khoản của bạn. Nếu không phải bạn, hãy đổi mật khẩu ngay lập tức.",
   "sound": true,
