@@ -1,13 +1,8 @@
 {
-  "title": "⚠️ Cảnh báo bảo mật",
-  "content": "Phát hiện đăng nhập lạ",
-  "sub_text": "",
-  "summary": "Địa chỉ IP: 192.168.1.1",
-  "big_text": "Có một thiết bị lạ đăng nhập vào tài khoản của bạn. Nếu không phải bạn, hãy đổi mật khẩu ngay lập tức.",
+  "title": "Ảnh từ GitHub",
+  "content": "Load ảnh trực tiếp từ URL",
+  "large_icon": "https://raw.githubusercontent.com/TMP1272/Language-Plugin/main/app.morphe.manager.png",
+  "big_picture": "https://raw.githubusercontent.com/TMP1272/Language-Plugin/main/com.vng.speedvn.png",
   "sound": true,
-  "vibrate": true,
-  "buttons": [
-    {"text": "Xem chi tiết", "url": "https://example.com/security"},
-    {"text": "Đổi mật khẩu", "url": "https://example.com/change-password"}
-  ]
+  "vibrate": true
 }
