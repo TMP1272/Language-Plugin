@@ -1,0 +1,63 @@
+name: Build Android NDK ARM64
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-ndk:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libc++-dev bison ninja cmake python3 python3-pip
+
+      - name: Init repo
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/android-src
+          cd $GITHUB_WORKSPACE/android-src
+          repo init -u https://android.googlesource.com/platform/manifest -b llvm-toolchain
+          repo sync -c
+
+      - name: Create symbolic links
+        run: |
+          cd $GITHUB_WORKSPACE/android-src/prebuilts/build-tools/linux-arm64/bin
+          ln -sf /bin/bison .
+          ln -sf /bin/ninja .
+          cd $GITHUB_WORKSPACE/android-src/prebuilts/clang/host
+          ln -s /usr linux-arm64
+          cd $GITHUB_WORKSPACE/android-src/prebuilts/cmake
+          ln -s /usr linux-arm64
+          cd $GITHUB_WORKSPACE/android-src/prebuilts/python
+          ln -s /usr linux-arm64
+
+      - name: Patch build scripts
+        run: |
+          # Áp dụng các thay đổi từ diff.txt (ví dụ dùng sed hoặc patch)
+          cd $GITHUB_WORKSPACE/android-src
+          patch -p1 < $GITHUB_WORKSPACE/diff.txt
+
+      - name: Build toolchain
+        run: |
+          cd $GITHUB_WORKSPACE/android-src
+          python3 toolchain/llvm_android/build.py --no-build windows --skip-tests --no-musl
+
+      - name: Package NDK
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/out/ndk-arm64
+          cp -r $GITHUB_WORKSPACE/android-src/out/stage2/* $GITHUB_WORKSPACE/out/ndk-arm64/
+          echo "NDK build completed"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ndk-arm64
+          path: $GITHUB_WORKSPACE/out/ndk-arm64
