@@ -39,7 +39,7 @@ jobs:
           sed -i 's/linux-x86/linux-arm64/g' py3_utils.py
           sed -i 's/linux-x86/linux-arm64/g' src/llvm_android/hosts.py
           # thêm CMAKE_BUILD_TYPE=Release
-          sed -i '/CMAKE_BUILD_TYPE.*Debug/a \ \ \ \ \ \ \ \ else:\n \ \ \ \ \ \ \ \ \ \ \ \ defines["CMAKE_BUILD_TYPE"] = "Release"' src/llvm_android/builders.py
+          sed -i '/CMAKE_BUILD_TYPE.*Debug/a \        else:\n            defines["CMAKE_BUILD_TYPE"] = "Release"' src/llvm_android/builders.py
           # chỉnh gcc triple
           sed -i 's/x86_64-linux/aarch64-linux/g' src/llvm_android/configs.py
           sed -i 's/x86_64-unknown-linux-gnu/aarch64-unknown-linux-gnu/g' src/llvm_android/configs.py
@@ -60,6 +60,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ndk-arm64
-          path: $GITHUB_WORKSPACE/android-src/out/stage2        with:
-          name: ndk-arm64
-          path: $GITHUB_WORKSPACE/out/ndk-arm64
+          path: $GITHUB_WORKSPACE/android-src/out/stage2
