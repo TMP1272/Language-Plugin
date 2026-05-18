@@ -71,7 +71,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ndk-arm64
-          path: $GITHUB_WORKSPACE/android-src/out/stage2        uses: actions/upload-artifact@v4
-        with:
-          name: ndk-arm64
           path: $GITHUB_WORKSPACE/android-src/out/stage2
