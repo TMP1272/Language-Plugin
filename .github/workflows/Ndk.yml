@@ -62,12 +62,11 @@ jobs:
           sed -i 's/libxml2_builder.build()/# libxml2_builder.build()/g' do_build.py
           sed -i 's/xz_builder.build()/# xz_builder.build()/g' do_build.py
           sed -i 's/set_default_toolchain(stage1.installed_toolchain)/set_default_toolchain(toolchains.Toolchain(Path(\"\/usr\"),Path(\"\/usr\")))/g' do_build.py
-          # patch clang host paths từ linux-x86 sang linux-arm64
+          # patch clang/cmake/ninja host paths từ linux-x86 sang linux-arm64
           sed -i 's/clang\/host\/linux-x86/clang\/host\/linux-arm64/g' src/llvm_android/paths.py
-          sed -i 's/linux-x86/linux-arm64/g' src/llvm_android/configs.py
-          # patch cmake/ninja paths
           sed -i 's/cmake\/linux-x86/cmake\/linux-arm64/g' src/llvm_android/paths.py
           sed -i 's/ninja\/linux-x86/ninja\/linux-arm64/g' src/llvm_android/paths.py
+          sed -i 's/linux-x86/linux-arm64/g' src/llvm_android/configs.py
 
       - name: Symlink system cmake/ninja/clang
         run: |
