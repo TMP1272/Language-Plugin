@@ -32,6 +32,12 @@ jobs:
           repo init -u https://android.googlesource.com/platform/manifest -b llvm-toolchain
           repo sync -c
 
+      - name: Fix python symlink
+        run: |
+          cd $GITHUB_WORKSPACE/android-src/prebuilts/python
+          rm -rf linux-arm64
+          ln -s /usr linux-arm64
+
       - name: Apply ARM64 patches with sed
         run: |
           cd $GITHUB_WORKSPACE/android-src/toolchain/llvm_android
