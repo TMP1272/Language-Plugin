@@ -23,7 +23,7 @@ jobs:
       - name: Install repo tool
         run: |
           curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo
-          chmod a+x /usr/local/bin/repo
+          sudo chmod a+x /usr/local/bin/repo
 
       - name: Init repo
         run: |
@@ -36,16 +36,16 @@ jobs:
         run: |
           # sửa trong prebuilts/python
           cd $GITHUB_WORKSPACE/android-src/prebuilts/python
-          rm -rf linux-arm64
-          ln -s /usr linux-arm64
+          sudo rm -rf linux-arm64
+          sudo ln -s /usr linux-arm64
           # sửa trong prebuilts/build-tools/path
           cd $GITHUB_WORKSPACE/android-src/prebuilts/build-tools/path
-          rm -rf linux-arm64
-          ln -s /usr linux-arm64
+          sudo rm -rf linux-arm64
+          sudo ln -s /usr linux-arm64
           # tạo symlink python3 trong path/linux-arm64
           cd $GITHUB_WORKSPACE/android-src/prebuilts/build-tools/path/linux-arm64
-          rm -f python3
-          ln -s /usr/bin/python3 python3
+          sudo rm -f python3
+          sudo ln -s /usr/bin/python3 python3
 
       - name: Apply ARM64 patches with sed
         run: |
