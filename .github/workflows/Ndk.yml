@@ -69,12 +69,17 @@ jobs:
           sed -i 's/cmake\/linux-x86/cmake\/linux-arm64/g' src/llvm_android/paths.py
           sed -i 's/ninja\/linux-x86/ninja\/linux-arm64/g' src/llvm_android/paths.py
 
-      - name: Symlink system cmake/ninja
+      - name: Symlink system cmake/ninja/clang
         run: |
           mkdir -p $GITHUB_WORKSPACE/android-src/prebuilts/cmake/linux-arm64/bin
           mkdir -p $GITHUB_WORKSPACE/android-src/prebuilts/ninja/linux-arm64
+          mkdir -p $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/bin
+
           ln -sf /usr/bin/cmake $GITHUB_WORKSPACE/android-src/prebuilts/cmake/linux-arm64/bin/cmake
           ln -sf /usr/bin/ninja $GITHUB_WORKSPACE/android-src/prebuilts/ninja/linux-arm64/ninja
+          ln -sf /usr/bin/clang $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/bin/clang
+          ln -sf /usr/bin/clang++ $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/bin/clang++
+          ln -sf /usr/bin/ld.lld $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/bin/ld.lld
 
       - name: Build toolchain
         run: |
