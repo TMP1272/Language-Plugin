@@ -62,18 +62,21 @@ jobs:
           sed -i 's/linux-x86/linux-arm64/g' src/llvm_android/paths.py
           sed -i 's/linux-x86/linux-arm64/g' py3_utils.py
           sed -i 's/linux-x86/linux-arm64/g' src/llvm_android/hosts.py
+          # patch thêm clang-r... versioned folder
+          sed -i 's/clang\/host\/linux-x86\/clang-r/clang\/host\/linux-arm64\/clang-r/g' src/llvm_android/base_builders.py
+          sed -i 's/clang\/host\/linux-x86\/clang-r/clang\/host\/linux-arm64\/clang-r/g' src/llvm_android/paths.py
 
       - name: Symlink system cmake/ninja/clang
         run: |
           mkdir -p $GITHUB_WORKSPACE/android-src/prebuilts/cmake/linux-arm64/bin
           mkdir -p $GITHUB_WORKSPACE/android-src/prebuilts/ninja/linux-arm64
-          mkdir -p $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/bin
+          mkdir -p $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/clang-r584948b/bin
 
           ln -sf /usr/bin/cmake $GITHUB_WORKSPACE/android-src/prebuilts/cmake/linux-arm64/bin/cmake
           ln -sf /usr/bin/ninja $GITHUB_WORKSPACE/android-src/prebuilts/ninja/linux-arm64/ninja
-          ln -sf /usr/bin/clang $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/bin/clang
-          ln -sf /usr/bin/clang++ $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/bin/clang++
-          ln -sf /usr/bin/ld.lld $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/bin/ld.lld
+          ln -sf /usr/bin/clang $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/clang-r584948b/bin/clang
+          ln -sf /usr/bin/clang++ $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/clang-r584948b/bin/clang++
+          ln -sf /usr/bin/ld.lld $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/clang-r584948b/bin/ld.lld
 
       - name: Build toolchain
         run: |
