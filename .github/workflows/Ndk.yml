@@ -53,7 +53,7 @@ jobs:
       - name: Apply ARM64 patches
         run: |
           cd $GITHUB_WORKSPACE/android-src/toolchain/llvm_android
-          # ép tất cả cmake/ninja/clang/gcc từ linux-x86 sang linux-arm64
+          # ép cmake/ninja/clang/gcc từ linux-x86 sang linux-arm64
           sed -i 's/prebuilts\/cmake\/linux-x86/prebuilts\/cmake\/linux-arm64/g' src/llvm_android/base_builders.py
           sed -i 's/prebuilts\/ninja\/linux-x86/prebuilts\/ninja\/linux-arm64/g' src/llvm_android/base_builders.py
           sed -i 's/prebuilts\/clang\/host\/linux-x86/prebuilts\/clang\/host\/linux-arm64/g' src/llvm_android/base_builders.py
