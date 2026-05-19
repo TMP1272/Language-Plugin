@@ -9,82 +9,55 @@ on:
 
 jobs:
   build-ndk:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest  # Dùng ubuntu-latest thay vì 22.04
+    
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+        with:
+          submodules: recursive  # Nếu có submodules
 
-      - name: Setup Python 3.11
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r26d
+          local-cache: true
+      
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: 3.28.1
+      
+      - name: Build for ARM64 Android
         run: |
-          sudo apt-get update
-          sudo apt-get install -y python3.11 python3.11-venv python3.11-dev
-          sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 2
-          python3 --version
-
-      - name: Install dependencies
+          # Tạo thư mục build
+          mkdir -p build/arm64-v8a
+          cd build/arm64-v8a
+          
+          # Build với NDK toolchain
+          cmake ../.. \
+            -DCMAKE_TOOLCHAIN_FILE=${ANDROID_NDK_HOME}/build/cmake/android.toolchain.cmake \
+            -DANDROID_ABI=arm64-v8a \
+            -DANDROID_PLATFORM=android-24 \
+            -DANDROID_STL=c++_shared \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_TESTING=OFF \
+            -DLLVM_BUILD_TOOLS=OFF \
+            -DLLVM_INCLUDE_TESTS=OFF
+          
+          # Build
+          cmake --build . --parallel $(nproc)
+      
+      - name: List built files
         run: |
-          sudo apt-get install -y \
-            libc++-dev bison ninja-build cmake python3-pip curl
-
-      - name: Install repo tool
-        run: |
-          curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo
-          sudo chmod a+x /usr/local/bin/repo
-
-      - name: Init repo
-        run: |
-          mkdir -p $GITHUB_WORKSPACE/android-src
-          cd $GITHUB_WORKSPACE/android-src
-          repo init -u https://android.googlesource.com/platform/manifest -b llvm-toolchain
-          repo sync -c
-
-      - name: Fix python symlinks
-        run: |
-          cd $GITHUB_WORKSPACE/android-src/prebuilts/python
-          sudo rm -rf linux-arm64
-          sudo ln -s /usr linux-arm64
-          cd $GITHUB_WORKSPACE/android-src/prebuilts/build-tools/path
-          sudo rm -rf linux-arm64
-          sudo ln -s /usr linux-arm64
-          cd $GITHUB_WORKSPACE/android-src/prebuilts/build-tools/path/linux-arm64
-          sudo rm -f python3
-          sudo ln -s /usr/bin/python3 python3
-
-      - name: Apply ARM64 patches
-        run: |
-          cd $GITHUB_WORKSPACE/android-src/toolchain/llvm_android
-          # ép cmake/ninja/clang/gcc từ linux-x86 sang linux-arm64
-          sed -i 's/prebuilts\/cmake\/linux-x86/prebuilts\/cmake\/linux-arm64/g' src/llvm_android/base_builders.py
-          sed -i 's/prebuilts\/ninja\/linux-x86/prebuilts\/ninja\/linux-arm64/g' src/llvm_android/base_builders.py
-          sed -i 's/prebuilts\/clang\/host\/linux-x86/prebuilts\/clang\/host\/linux-arm64/g' src/llvm_android/base_builders.py
-          sed -i 's/prebuilts\/gcc\/linux-x86/prebuilts\/gcc\/linux-arm64/g' src/llvm_android/base_builders.py
-          sed -i 's/linux-x86/linux-arm64/g' src/llvm_android/configs.py
-          sed -i 's/linux-x86/linux-arm64/g' src/llvm_android/paths.py
-          sed -i 's/linux-x86/linux-arm64/g' py3_utils.py
-          sed -i 's/linux-x86/linux-arm64/g' src/llvm_android/hosts.py
-          # patch thêm clang-r... versioned folder
-          sed -i 's/clang\/host\/linux-x86\/clang-r/clang\/host\/linux-arm64\/clang-r/g' src/llvm_android/base_builders.py
-          sed -i 's/clang\/host\/linux-x86\/clang-r/clang\/host\/linux-arm64\/clang-r/g' src/llvm_android/paths.py
-
-      - name: Symlink system cmake/ninja/clang
-        run: |
-          mkdir -p $GITHUB_WORKSPACE/android-src/prebuilts/cmake/linux-arm64/bin
-          mkdir -p $GITHUB_WORKSPACE/android-src/prebuilts/ninja/linux-arm64
-          mkdir -p $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/clang-r584948b/bin
-
-          ln -sf /usr/bin/cmake $GITHUB_WORKSPACE/android-src/prebuilts/cmake/linux-arm64/bin/cmake
-          ln -sf /usr/bin/ninja $GITHUB_WORKSPACE/android-src/prebuilts/ninja/linux-arm64/ninja
-          ln -sf /usr/bin/clang $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/clang-r584948b/bin/clang
-          ln -sf /usr/bin/clang++ $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/clang-r584948b/bin/clang++
-          ln -sf /usr/bin/ld.lld $GITHUB_WORKSPACE/android-src/prebuilts/clang/host/linux-arm64/clang-r584948b/bin/ld.lld
-
-      - name: Build toolchain
-        run: |
-          cd $GITHUB_WORKSPACE/android-src
-          python3 toolchain/llvm_android/build.py --no-build windows --skip-tests --no-musl
-
+          echo "Built files:"
+          find build/arm64-v8a -name "*.so" -o -name "*.a" | head -20
+      
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ndk-arm64
-          path: $GITHUB_WORKSPACE/android-src/out/stage2
+          name: android-arm64-binaries
+          path: |
+            build/arm64-v8a/*.so
+            build/arm64-v8a/*.a
+            build/arm64-v8a/lib/*.so 2>/dev/null || true
