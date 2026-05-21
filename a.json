@@ -4,11 +4,12 @@
       "package": "com.tmp1272.adbnotification",
       "signatures": [
         "SHA256:FA:DA:D2:06:F4:B6:EE:7A:DD:C6:AB:E6:13:1F:EA:E2:8E:93:80:CD:A0:A6:CE:59:8F:93:4F:9E:E4:3A:74:91",
-        "SHA1:D0:AB:10:EA:54:B2:C8:D7:B7:D0:07:0A:1F:D6:8A:7C:58:C3:FD:1B"
+        "FADAD206F4B6EE7ADDC6ABE6131FEAE28E9380CDA0A6CE598F934F9EE43A7491"
       ],
       "allowed": true,
       "note": "Ứng dụng chính thức",
-      "expiry": "2126-03-29"
+      "version": "1.1.0",
+      "expiry": "2126-30-31"
     }
   ]
 }
