@@ -2,14 +2,22 @@
   "apps": [
     {
       "package": "com.tmp1272.adbnotification",
-      "signatures": [
-        "SHA256:FA:DA:D2:06:F4:B6:EE:7A:DD:C6:AB:E6:13:1F:EA:E2:8E:93:80:CD:A0:A6:CE:59:8F:93:4F:9E:E4:3A:74:91",
-        "FADAD206F4B6EE7ADDC6ABE6131FEAE28E9380CDA0A6CE598F934F9EE43A7491"
-      ],
+      "signatures": {
+        "release": [
+          "SHA256:FA:DA:D2:06:F4:B6:EE:7A:DD:C6:AB:E6:13:1F:EA:E2:8E:93:80:CD:A0:A6:CE:59:8F:93:4F:9E:E4:3A:74:91",
+          "FADAD206F4B6EE7ADDC6ABE6131FEAE28E9380CDA0A6CE598F934F9EE43A7491"
+        ],
+        "debug": [
+          "SHA256:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF",
+          "1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF"
+        ]
+      },
       "allowed": true,
-      "note": "Ứng dụng chính thức",
+      "allowed_build_types": ["release", "debug"],
+      "note": "ADB Notification Tool - Official Release & Debug",
       "version": "1.1.0",
-      "expiry": "2126-30-31"
+      "developer": "TMP1272",
+      "expiry": "2126-03-31"
     }
   ]
 }
