@@ -1,0 +1,14 @@
+{
+  "apps": [
+    {
+      "package": "com.tmp1272.adbnotification",
+      "signatures": [
+        "SHA256:ABCD1234...",
+        "SHA1:EFGH5678..."
+      ],
+      "allowed": true,
+      "note": "Ứng dụng chính thức",
+      "expiry": "2025-12-31"
+    }
+  ]
+}
