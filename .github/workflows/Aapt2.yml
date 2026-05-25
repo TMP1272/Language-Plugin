@@ -24,7 +24,7 @@ jobs:
 
       - name: Extract aapt2 sources
         run: |
-          mkdir -p aapt2
+          ls -lh build.7z.*
           7z x build.7z.001 -oaapt2
     
       - name: Configure CMake
