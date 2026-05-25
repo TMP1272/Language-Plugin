@@ -4,7 +4,7 @@
     "subText": "Thông báo quan trọng",
     "summary": "Tóm tắt",
     "bigText": "Nội dung chi tiết dài hơn...",
-    "sound": true,
+    "sound": false,
     "vibrate": true,
     "buttons": [
         {"text": "Xem chi tiết", "action": "detail"},
