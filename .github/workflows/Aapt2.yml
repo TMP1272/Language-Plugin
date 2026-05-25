@@ -45,7 +45,9 @@ jobs:
             echo "Không tìm thấy binary aapt2 trong JAR!"
             exit 1
           fi
-          cp "$AAPT2_PATH" ./aapt2
+          if [ "$AAPT2_PATH" != "./aapt2" ]; then
+            cp "$AAPT2_PATH" ./aapt2
+          fi
           chmod +x ./aapt2
           ./aapt2 version
 
