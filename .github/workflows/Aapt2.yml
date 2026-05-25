@@ -16,26 +16,22 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y openjdk-17-jdk git make python3 curl unzip
 
-      - name: Clone minimal AOSP repos
+      - name: Clone minimal AOSP repos (main branch only)
         run: |
           mkdir aosp && cd aosp
-          git clone https://android.googlesource.com/platform/build/soong build/soong
-          git clone https://android.googlesource.com/platform/frameworks/base frameworks/base
-          git clone https://android.googlesource.com/platform/frameworks/native frameworks/native
-          git clone https://android.googlesource.com/platform/system/core system/core
+          git clone --branch master --depth 1 https://android.googlesource.com/platform/build/soong build/soong
+          git clone --branch master --depth 1 https://android.googlesource.com/platform/frameworks/base frameworks/base
+          git clone --branch master --depth 1 https://android.googlesource.com/platform/frameworks/native frameworks/native
+          git clone --branch master --depth 1 https://android.googlesource.com/platform/system/core system/core
 
       - name: Bootstrap Soong
         run: |
           cd aosp
-          # Tạo symlink để Soong nhận diện
-          ln -s build/soong .
-          # Chạy bootstrap
           build/soong/soong_ui.bash --make-mode --skip-ninja bootstrap
 
       - name: Build aapt2 with Soong
         run: |
           cd aosp
-          # Build riêng module aapt2
           build/soong/soong_ui.bash --make-mode aapt2
 
       - name: Upload artifact
