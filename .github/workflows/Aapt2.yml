@@ -29,7 +29,7 @@ jobs:
       - name: Download aapt2 9.2.1 binary
         run: |
           mkdir -p tools/aapt2
-          curl -L https://dl.google.com/dl/android/maven2/com/android/tools/build/aapt2/9.2.1/aapt2-9.2.1-linux.zip -o tools/aapt2/aapt2.zip
+          curl -L https://dl.google.com/android/maven2/com/android/tools/build/aapt2/9.2.1/aapt2-9.2.1-linux.zip -o tools/aapt2/aapt2.zip
           unzip tools/aapt2/aapt2.zip -d tools/aapt2
           chmod +x tools/aapt2/aapt2
           tools/aapt2/aapt2 version
