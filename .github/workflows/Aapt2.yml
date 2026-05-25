@@ -1,94 +1,46 @@
-name: Build libandroidfw with NDK
+name: Build aapt2 (ARM64, 16KB page)
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  build-libandroidfw:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Install deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake ninja-build python3 curl unzip git
+          sudo apt-get install -y ninja-build protobuf-compiler cmake p7zip-full
 
-      - name: Cache Android NDK r29
-        uses: actions/cache@v4
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1
         with:
-          path: $HOME/android-ndk-r29
-          key: ndk-r29
+          ndk-version: r26d
+          add-to-path: true
 
-      - name: Set up Android NDK r29
+      - name: Extract aapt2 sources
         run: |
-          if [ ! -d "$HOME/android-ndk-r29" ]; then
-            curl -L https://dl.google.com/android/repository/android-ndk-r29-linux.zip -o ndk.zip
-            unzip ndk.zip -d $HOME
-          fi
-          echo "ANDROID_NDK_HOME=$HOME/android-ndk-r29" >> $GITHUB_ENV
-
-      - name: Clone AOSP repos needed for libandroidfw
+          mkdir -p aapt2
+          7z x build.7z.001 -oaapt2
+    
+      - name: Configure CMake
         run: |
-          mkdir aosp && cd aosp
-          git clone --branch master --depth 1 https://android.googlesource.com/platform/frameworks/base frameworks/base
-          git clone --branch master --depth 1 https://android.googlesource.com/platform/system/core system/core
-          git clone --branch master --depth 1 https://android.googlesource.com/platform/system/libbase libbase
-          mv frameworks/base/libs/androidfw ../androidfw-src
-
-      - name: Add CMakeLists.txt for libandroidfw
-        run: |
-          cat <<'EOF' > androidfw-src/CMakeLists.txt
-          cmake_minimum_required(VERSION 3.22)
-          project(libandroidfw LANGUAGES CXX)
-          set(CMAKE_CXX_STANDARD 20)
-          set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-          file(GLOB ANDROIDFW_SOURCES
-              ApkAssets.cpp ApkParsing.cpp Asset.cpp AssetDir.cpp AssetManager.cpp
-              AssetManager2.cpp AssetsProvider.cpp AttributeResolution.cpp BigBuffer.cpp
-              BigBufferStream.cpp ChunkIterator.cpp ConfigDescription.cpp FileStream.cpp
-              Idmap.cpp LoadedArsc.cpp Locale.cpp LocaleData.cpp LocaleDataLookup.cpp
-              misc.cpp NinePatch.cpp ObbFile.cpp PosixUtils.cpp Png.cpp PngChunkFilter.cpp
-              PngCrunch.cpp ResourceTimer.cpp ResourceTypes.cpp ResourceUtils.cpp
-              StreamingZipInflater.cpp StringPool.cpp TypeWrappers.cpp Util.cpp
-              ZipFileRO.cpp ZipUtils.cpp
-          )
-
-          add_library(androidfw STATIC ${ANDROIDFW_SOURCES})
-          target_include_directories(androidfw PUBLIC
-              ${CMAKE_CURRENT_SOURCE_DIR}/include
-              ../system/core/include
-              ../system/core/libutils/include
-              ../libbase/include
-          )
-          target_link_libraries(androidfw
-              log utils cutils ziparchive png base z
-          )
-          EOF
-
-      - name: Configure build for arm64-v8a
-        run: |
-          mkdir -p build-arm64
-          cd build-arm64
-          cmake ../androidfw-src \
+          cmake -S . -B build \
             -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake \
             -DANDROID_ABI=arm64-v8a \
-            -DANDROID_PLATFORM=android-21 \
-            -GNinja
+            -DANDROID_PLATFORM=android-29 \
+            -DCMAKE_BUILD_TYPE=Release \
+            -G Ninja
 
-      - name: Build libandroidfw
-        run: |
-          cd build-arm64
-          ninja androidfw
+      - name: Build aapt2
+        run: cmake --build build --config Release -j$(nproc)
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: libandroidfw-arm64-v8a
-          path: build-arm64/libandroidfw.a
+          name: aapt2-arm64-v8a
+          path: build/aapt2
