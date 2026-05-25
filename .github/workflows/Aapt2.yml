@@ -1,4 +1,4 @@
-name: Build aapt2 arm64-v8a from AOSP
+name: Build aapt2 with Soong
 
 on:
   push:
@@ -11,80 +11,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake ninja-build python3 curl unzip git openjdk-17-jdk
+          sudo apt-get install -y openjdk-17-jdk git make python3 curl unzip
 
-      - name: Cache Android NDK r29
-        uses: actions/cache@v4
-        with:
-          path: $HOME/android-ndk-r29
-          key: ndk-r29
-
-      - name: Set up Android NDK r29
+      - name: Clone minimal AOSP repos
         run: |
-          if [ ! -d "$HOME/android-ndk-r29" ]; then
-            curl -L https://dl.google.com/android/repository/android-ndk-r29-linux.zip -o ndk.zip
-            unzip ndk.zip -d $HOME
-          fi
-          echo "ANDROID_NDK_HOME=$HOME/android-ndk-r29" >> $GITHUB_ENV
+          mkdir aosp && cd aosp
+          git clone https://android.googlesource.com/platform/build/soong build/soong
+          git clone https://android.googlesource.com/platform/frameworks/base frameworks/base
+          git clone https://android.googlesource.com/platform/frameworks/native frameworks/native
+          git clone https://android.googlesource.com/platform/system/core system/core
 
-      - name: Clone AOSP sources
+      - name: Bootstrap Soong
         run: |
-          git clone https://android.googlesource.com/platform/frameworks/base
-          git clone https://android.googlesource.com/platform/frameworks/native
-          git clone https://android.googlesource.com/platform/system/core
-          mv base/tools/aapt2 ./aapt2-src
+          cd aosp
+          # Tạo symlink để Soong nhận diện
+          ln -s build/soong .
+          # Chạy bootstrap
+          build/soong/soong_ui.bash --make-mode --skip-ninja bootstrap
 
-      - name: Create CMakeLists.txt
+      - name: Build aapt2 with Soong
         run: |
-          cat <<'EOF' > aapt2-src/CMakeLists.txt
-          cmake_minimum_required(VERSION 3.22)
-          project(aapt2 LANGUAGES CXX)
-
-          set(CMAKE_CXX_STANDARD 17)
-          set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-          file(GLOB_RECURSE AAPT2_SOURCES
-              *.cpp
-          )
-
-          add_executable(aapt2 ${AAPT2_SOURCES})
-
-          target_include_directories(aapt2 PRIVATE
-              ${CMAKE_CURRENT_SOURCE_DIR}
-              ${CMAKE_CURRENT_SOURCE_DIR}/../native/include
-              ${CMAKE_CURRENT_SOURCE_DIR}/../system/core/include
-          )
-
-          target_link_libraries(aapt2
-              log
-              android
-              z
-          )
-          EOF
-
-      - name: Configure build for arm64-v8a
-        run: |
-          mkdir -p build-arm64
-          cd build-arm64
-          cmake ../aapt2-src \
-            -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake \
-            -DANDROID_ABI=arm64-v8a \
-            -DANDROID_PLATFORM=android-21 \
-            -GNinja
-
-      - name: Build aapt2
-        run: |
-          cd build-arm64
-          ninja aapt2
+          cd aosp
+          # Build riêng module aapt2
+          build/soong/soong_ui.bash --make-mode aapt2
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: aapt2-arm64-v8a-9.2.1
-          path: build-arm64/aapt2
+          name: aapt2-arm64-v8a
+          path: aosp/out/soong/.intermediates/frameworks/base/tools/aapt2/aapt2/android_arm64_armv8-a_shared/aapt2
