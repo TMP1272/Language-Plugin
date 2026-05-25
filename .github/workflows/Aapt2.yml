@@ -1,4 +1,4 @@
-name: Build aapt2 arm64-v8a
+name: Build aapt2 arm64-v8a from AOSP
 
 on:
   push:
@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake ninja-build python3 curl unzip openjdk-17-jdk
+          sudo apt-get install -y build-essential cmake ninja-build python3 curl unzip git openjdk-17-jdk
 
       - name: Cache Android NDK r29
         uses: actions/cache@v4
@@ -33,29 +33,42 @@ jobs:
           fi
           echo "ANDROID_NDK_HOME=$HOME/android-ndk-r29" >> $GITHUB_ENV
 
-      - name: Download and extract aapt2 9.2.1 binary
+      - name: Clone AOSP aapt2 source
         run: |
-          mkdir -p tools/aapt2
-          curl -L https://dl.google.com/android/maven2/com/android/tools/build/aapt2/9.2.1-15009934/aapt2-9.2.1-15009934-linux.jar -o tools/aapt2/aapt2.jar
-          cd tools/aapt2
-          jar xf aapt2.jar
-          # tìm file thực thi aapt2 trong JAR
-          AAPT2_PATH=$(find . -type f -name aapt2 | head -n 1)
-          if [ -z "$AAPT2_PATH" ]; then
-            echo "Không tìm thấy binary aapt2 trong JAR!"
-            exit 1
-          fi
-          if [ "$AAPT2_PATH" != "./aapt2" ]; then
-            cp "$AAPT2_PATH" ./aapt2
-          fi
-          chmod +x ./aapt2
-          ./aapt2 version
+          git clone https://android.googlesource.com/platform/frameworks/base
+          mv base/tools/aapt2 ./aapt2-src
+
+      - name: Create CMakeLists.txt
+        run: |
+          cat <<'EOF' > aapt2-src/CMakeLists.txt
+          cmake_minimum_required(VERSION 3.22)
+          project(aapt2 LANGUAGES CXX)
+
+          set(CMAKE_CXX_STANDARD 17)
+          set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+          file(GLOB_RECURSE AAPT2_SOURCES
+              *.cpp
+          )
+
+          add_executable(aapt2 ${AAPT2_SOURCES})
+
+          target_include_directories(aapt2 PRIVATE
+              ${CMAKE_CURRENT_SOURCE_DIR}
+          )
+
+          target_link_libraries(aapt2
+              log
+              android
+              z
+          )
+          EOF
 
       - name: Configure build for arm64-v8a
         run: |
           mkdir -p build-arm64
           cd build-arm64
-          cmake .. \
+          cmake ../aapt2-src \
             -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake \
             -DANDROID_ABI=arm64-v8a \
             -DANDROID_PLATFORM=android-21 \
