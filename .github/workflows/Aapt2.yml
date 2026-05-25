@@ -19,8 +19,7 @@ jobs:
       - name: Clone minimal AOSP repos (main branch only)
         run: |
           mkdir aosp && cd aosp
-          git clone --branch master --depth 1 https://android.googlesource.com/platform/build/soong build/soong
-          git clone --branch master --depth 1 https://android.googlesource.com/platform/build/ build
+          git clone --branch master --depth 1 https://android.googlesource.com/platform/build build
           git clone --branch master --depth 1 https://android.googlesource.com/platform/frameworks/base frameworks/base
           git clone --branch master --depth 1 https://android.googlesource.com/platform/frameworks/native frameworks/native
           git clone --branch master --depth 1 https://android.googlesource.com/platform/system/core system/core
