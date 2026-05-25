@@ -33,10 +33,12 @@ jobs:
           fi
           echo "ANDROID_NDK_HOME=$HOME/android-ndk-r29" >> $GITHUB_ENV
 
-      - name: Clone libandroidfw source
+      - name: Clone AOSP repos needed for libandroidfw
         run: |
           mkdir aosp && cd aosp
           git clone --branch master --depth 1 https://android.googlesource.com/platform/frameworks/base frameworks/base
+          git clone --branch master --depth 1 https://android.googlesource.com/platform/system/core system/core
+          git clone --branch master --depth 1 https://android.googlesource.com/platform/system/libbase libbase
           mv frameworks/base/libs/androidfw ../androidfw-src
 
       - name: Add CMakeLists.txt for libandroidfw
@@ -61,6 +63,9 @@ jobs:
           add_library(androidfw STATIC ${ANDROIDFW_SOURCES})
           target_include_directories(androidfw PUBLIC
               ${CMAKE_CURRENT_SOURCE_DIR}/include
+              ../system/core/include
+              ../system/core/libutils
+              ../libbase/include
           )
           target_link_libraries(androidfw
               log utils cutils ziparchive png base z
