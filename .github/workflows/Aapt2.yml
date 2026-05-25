@@ -64,7 +64,7 @@ jobs:
           target_include_directories(androidfw PUBLIC
               ${CMAKE_CURRENT_SOURCE_DIR}/include
               ../system/core/include
-              ../system/core/libutils
+              ../system/core/libutils/include
               ../libbase/include
           )
           target_link_libraries(androidfw
