@@ -1,4 +1,4 @@
-name: Build aapt2 with CMake
+name: Build aapt2 with NDK
 
 on:
   push:
@@ -46,36 +46,9 @@ jobs:
           cat <<'EOF' > aapt2-src/CMakeLists.txt
           cmake_minimum_required(VERSION 3.22)
           project(aapt2 LANGUAGES CXX)
-
           set(CMAKE_CXX_STANDARD 20)
           set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-          # libcutils
-          file(GLOB_RECURSE CUTILS_SOURCES ../system/core/libcutils/*.c ../system/core/libcutils/*.cpp)
-          add_library(cutils STATIC ${CUTILS_SOURCES})
-          target_include_directories(cutils PUBLIC ../system/core/include ../system/core/libcutils)
-
-          # libziparchive
-          file(GLOB_RECURSE ZIPARCHIVE_SOURCES ../system/core/libziparchive/*.cpp)
-          add_library(ziparchive STATIC ${ZIPARCHIVE_SOURCES})
-          target_include_directories(ziparchive PUBLIC ../system/core/include ../system/core/libziparchive/include)
-
-          # libutils
-          file(GLOB_RECURSE UTILS_SOURCES ../system/core/libutils/*.cpp)
-          add_library(utils STATIC ${UTILS_SOURCES})
-          target_include_directories(utils PUBLIC ../system/core/include ../system/core/libutils)
-
-          # liblog
-          file(GLOB_RECURSE LOG_SOURCES ../system/core/liblog/*.cpp)
-          add_library(log STATIC ${LOG_SOURCES})
-          target_include_directories(log PUBLIC ../system/core/include ../system/core/liblog)
-
-          # libandroidfw
-          file(GLOB_RECURSE ANDROIDFW_SOURCES ../frameworks/base/libs/androidfw/*.cpp)
-          add_library(androidfw STATIC ${ANDROIDFW_SOURCES})
-          target_include_directories(androidfw PUBLIC ../frameworks/base/libs/androidfw/include ../frameworks/base/libs/androidfw)
-
-          # libaapt2
           set(TOOL_SOURCES
               cmd/ApkInfo.cpp cmd/Command.cpp cmd/Compile.cpp cmd/Convert.cpp
               cmd/Diff.cpp cmd/Dump.cpp cmd/Link.cpp cmd/Optimize.cpp cmd/Util.cpp
@@ -87,6 +60,7 @@ jobs:
               Debug.cpp DominatorTree.cpp LoadedApk.cpp Resource*.cpp
               SdkConstants.cpp ValueTransformer.cpp
           )
+
           add_library(libaapt2 STATIC ${AAPT2_SOURCES})
           target_include_directories(libaapt2 PRIVATE
               ${CMAKE_CURRENT_SOURCE_DIR}
@@ -95,10 +69,18 @@ jobs:
               ../frameworks/base/libs/androidfw/include
           )
           target_link_libraries(libaapt2
-              androidfw utils log cutils ziparchive expat png base protobuf z
+              androidfw
+              log
+              utils
+              cutils
+              ziparchive
+              expat
+              png
+              base
+              protobuf
+              z
           )
 
-          # aapt2 binary
           add_executable(aapt2 Main.cpp ${TOOL_SOURCES})
           target_link_libraries(aapt2 libaapt2)
           EOF
