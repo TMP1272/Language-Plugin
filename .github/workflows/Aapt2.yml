@@ -61,6 +61,11 @@ jobs:
               SdkConstants.cpp ValueTransformer.cpp
           )
 
+          # libandroidfw từ source
+          file(GLOB ANDROIDFW_SOURCES ../frameworks/base/libs/androidfw/*.cpp)
+          add_library(androidfw STATIC ${ANDROIDFW_SOURCES})
+          target_include_directories(androidfw PUBLIC ../frameworks/base/libs/androidfw/include)
+
           add_library(libaapt2 STATIC ${AAPT2_SOURCES})
           target_include_directories(libaapt2 PRIVATE
               ${CMAKE_CURRENT_SOURCE_DIR}
