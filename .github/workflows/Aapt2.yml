@@ -1,4 +1,4 @@
-name: Build aapt2 with NDK
+name: Build libandroidfw with NDK
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build-aapt2:
+  build-libandroidfw:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake ninja-build python3 curl unzip git openjdk-17-jdk
+          sudo apt-get install -y build-essential cmake ninja-build python3 curl unzip git
 
       - name: Cache Android NDK r29
         uses: actions/cache@v4
@@ -33,80 +33,57 @@ jobs:
           fi
           echo "ANDROID_NDK_HOME=$HOME/android-ndk-r29" >> $GITHUB_ENV
 
-      - name: Clone AOSP repos needed for aapt2
+      - name: Clone libandroidfw source
         run: |
           mkdir aosp && cd aosp
           git clone --branch master --depth 1 https://android.googlesource.com/platform/frameworks/base frameworks/base
-          git clone --branch master --depth 1 https://android.googlesource.com/platform/frameworks/native frameworks/native
-          git clone --branch master --depth 1 https://android.googlesource.com/platform/system/core system/core
-          mv frameworks/base/tools/aapt2 ../aapt2-src
+          mv frameworks/base/libs/androidfw ../androidfw-src
 
-      - name: Add CMakeLists.txt for aapt2
+      - name: Add CMakeLists.txt for libandroidfw
         run: |
-          cat <<'EOF' > aapt2-src/CMakeLists.txt
+          cat <<'EOF' > androidfw-src/CMakeLists.txt
           cmake_minimum_required(VERSION 3.22)
-          project(aapt2 LANGUAGES CXX)
+          project(libandroidfw LANGUAGES CXX)
           set(CMAKE_CXX_STANDARD 20)
           set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-          set(TOOL_SOURCES
-              cmd/ApkInfo.cpp cmd/Command.cpp cmd/Compile.cpp cmd/Convert.cpp
-              cmd/Diff.cpp cmd/Dump.cpp cmd/Link.cpp cmd/Optimize.cpp cmd/Util.cpp
-          )
-          file(GLOB_RECURSE AAPT2_SOURCES
-              compile/*.cpp configuration/*.cpp dump/*.cpp filter/*.cpp
-              format/**/*.cpp io/*.cpp link/*.cpp optimize/*.cpp process/*.cpp
-              split/*.cpp text/*.cpp util/*.cpp java/*.cpp xml/*.cpp
-              Debug.cpp DominatorTree.cpp LoadedApk.cpp Resource*.cpp
-              SdkConstants.cpp ValueTransformer.cpp
+          file(GLOB ANDROIDFW_SOURCES
+              ApkAssets.cpp ApkParsing.cpp Asset.cpp AssetDir.cpp AssetManager.cpp
+              AssetManager2.cpp AssetsProvider.cpp AttributeResolution.cpp BigBuffer.cpp
+              BigBufferStream.cpp ChunkIterator.cpp ConfigDescription.cpp FileStream.cpp
+              Idmap.cpp LoadedArsc.cpp Locale.cpp LocaleData.cpp LocaleDataLookup.cpp
+              misc.cpp NinePatch.cpp ObbFile.cpp PosixUtils.cpp Png.cpp PngChunkFilter.cpp
+              PngCrunch.cpp ResourceTimer.cpp ResourceTypes.cpp ResourceUtils.cpp
+              StreamingZipInflater.cpp StringPool.cpp TypeWrappers.cpp Util.cpp
+              ZipFileRO.cpp ZipUtils.cpp
           )
 
-          # libandroidfw từ source
-          file(GLOB ANDROIDFW_SOURCES ../frameworks/base/libs/androidfw/*.cpp)
           add_library(androidfw STATIC ${ANDROIDFW_SOURCES})
-          target_include_directories(androidfw PUBLIC ../frameworks/base/libs/androidfw/include)
-
-          add_library(libaapt2 STATIC ${AAPT2_SOURCES})
-          target_include_directories(libaapt2 PRIVATE
-              ${CMAKE_CURRENT_SOURCE_DIR}
-              ../native/include
-              ../system/core/include
-              ../frameworks/base/libs/androidfw/include
+          target_include_directories(androidfw PUBLIC
+              ${CMAKE_CURRENT_SOURCE_DIR}/include
           )
-          target_link_libraries(libaapt2
-              androidfw
-              log
-              utils
-              cutils
-              ziparchive
-              expat
-              png
-              base
-              protobuf
-              z
+          target_link_libraries(androidfw
+              log utils cutils ziparchive png base z
           )
-
-          add_executable(aapt2 Main.cpp ${TOOL_SOURCES})
-          target_link_libraries(aapt2 libaapt2)
           EOF
 
       - name: Configure build for arm64-v8a
         run: |
           mkdir -p build-arm64
           cd build-arm64
-          cmake ../aapt2-src \
+          cmake ../androidfw-src \
             -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake \
             -DANDROID_ABI=arm64-v8a \
             -DANDROID_PLATFORM=android-21 \
             -GNinja
 
-      - name: Build aapt2
+      - name: Build libandroidfw
         run: |
           cd build-arm64
-          ninja aapt2
+          ninja androidfw
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: aapt2-arm64-v8a
-          path: build-arm64/aapt2
+          name: libandroidfw-arm64-v8a
+          path: build-arm64/libandroidfw.a
