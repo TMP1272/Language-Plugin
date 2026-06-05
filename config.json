@@ -5,15 +5,15 @@
             "variants": {
                 "debug": [
                     {
-                        "package": "com.tmp1272.adbnotification.debug",
+                        "package": "com.tmp1272.adbnotification",
                         "sha256": ""
                     },
                     "sha256_debug của com.tmp1272.adbnotification"
                 ],
                 "release": [
                     {
-                        "package": "com.tmp1272.adbnotification.release",
-                        "sha256": ""
+                        "package": "com.tmp1272.adbnotification",
+                        "sha256": "FA:DA:D2:06:F4:B6:EE:7A:DD:C6:AB:E6:13:1F:EA:E2:8E:93:80:CD:A0:A6:CE:59:8F:93:4F:9E:E4:3A:74:91"
                     },
                     "FA:DA:D2:06:F4:B6:EE:7A:DD:C6:AB:E6:13:1F:EA:E2:8E:93:80:CD:A0:A6:CE:59:8F:93:4F:9E:E4:3A:74:91"
                 ]
