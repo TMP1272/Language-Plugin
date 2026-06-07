@@ -2,12 +2,9 @@
   "apps": [
     {
       "package": "com.tmp1272.adbnotification",
-      "allowed_build_types": ["release", "debug"],
+      "sha256": "FA:DA:D2:06:F4:B6:EE:7A:DD:C6:AB:E6:13:1F:EA:E2:8E:93:80:CD:A0:A6:CE:59:8F:93:4F:9E:E4:3A:74:91",
+      "allowed_build_types": ["debug"],
       "variants": {
-        "release": {
-          "package": "com.tmp1272.adbnotification",
-          "sha256": "FA:DA:D2:06:F4:B6:EE:7A:DD:C6:AB:E6:13:1F:EA:E2:8E:93:80:CD:A0:A6:CE:59:8F:93:4F:9E:E4:3A:74:91"
-        },
         "debug": {
           "package": "com.tmp1272.adbnotification",
           "sha256": "E9:BE:F8:F7:B7:78:91:A4:80:78:E8:CD:D1:77:AB:FA:7E:41:A7:6B:9D:1F:5B:3C:CB:68:58:A2:4E:36:42:20"
